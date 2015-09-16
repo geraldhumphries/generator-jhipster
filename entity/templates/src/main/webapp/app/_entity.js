@@ -11,7 +11,7 @@ angular.module('<%=angularAppName%>')
                     pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityInstance %>.home.title'<% }else{ %>'<%= entityClass %>s'<% } %>
                 },
                 views: {
-                    'content@': {
+                    'content@site': {
                         templateUrl: 'scripts/app/entities/<%= entityInstance %>/<%= entityInstance %>s.html',
                         controller: '<%= entityClass %>Controller'
                     }

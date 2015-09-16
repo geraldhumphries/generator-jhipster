@@ -26,7 +26,8 @@ angular.module('<%=angularAppName%>').controller('<%= entityClass %>DialogContro
                 }
             } %><% for (idx in queries) { %>
         <%- queries[idx] %><% } %>
-        $scope.load = function(id) {
+        <% if (entityInstance != 'load'){ %>$scope.load = function (id) {<% } %>
+        <% else { %>$scope.loadfn = function (id) {<% } %>
             <%= entityClass %>.get({id : id}, function(result) {
                 $scope.<%= entityInstance %> = result;
             });
