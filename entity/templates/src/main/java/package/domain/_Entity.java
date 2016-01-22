@@ -74,7 +74,7 @@ import <%=packageName%>.domain.enumeration.<%= element %>;<% }); %>
 public class <%= entityClass %> implements Serializable {
 <% if (databaseType == 'sql') { %>
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;<% } %><% if (databaseType == 'mongodb') { %>
     @Id
     private String id;<% } %><% if (databaseType == 'cassandra') { %>
