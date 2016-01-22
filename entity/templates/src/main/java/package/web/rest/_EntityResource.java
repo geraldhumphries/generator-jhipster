@@ -31,6 +31,9 @@ import java.util.UUID;<% } %><% if (searchEngine == 'elasticsearch' || dto == 'm
 import java.util.stream.Collectors;<% } %><% if (searchEngine == 'elasticsearch' || fieldsContainNoOwnerOneToOne == true) { %>
 import java.util.stream.StreamSupport;<% } %><% if (searchEngine == 'elasticsearch') { %>
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import static org.elasticsearch.index.query.QueryBuilders.*;<% } %>
 
 /**
@@ -123,6 +126,6 @@ public class <%= entityClass %>Resource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<<%= instanceType %>> search<%= entityClass %>s(@PathVariable String query) {<%- include('../../common/search_template', {viaService: viaService}); -%>
+    public ResponseEntity<List<<%= instanceType %>>> search<%= entityClass %>s(@PathVariable String query, Pageable pageable) throws URISyntaxException, UnsupportedEncodingException {<%- include('../../common/search_template', {viaService: viaService}); -%>
     }<% } %>
 }

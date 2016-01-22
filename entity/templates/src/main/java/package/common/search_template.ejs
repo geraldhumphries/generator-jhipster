@@ -2,9 +2,8 @@
     var mapper = entityInstance  + 'Mapper';
     var entityToDtoReference = mapper + '::'+ entityInstance +'To' + entityClass + 'DTO'; %>
         log.debug("REST request to search <%= entityClass %>s for query {}", query);
-        return StreamSupport
-            .stream(<%= entityInstance %>SearchRepository.search(queryStringQuery(query)).spliterator(), false)<% if (dto == 'mapstruct') { %>
-            .map(<%= entityToDtoReference %>)<% } %>
-            .collect(Collectors.toList());<% } else { %>
+        Page<<%= entityClass %>> page = <%= entityInstance %>SearchRepository.search(queryStringQuery(query), pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/_search/<%= entityInstance %>s/" + URLEncoder.encode(query, "UTF-8"));
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);<% } else { %>
         log.debug("Request to search <%= entityClass %>s for query {}", query);
         return <%= entityInstance %>Service.search(query);<% } %>

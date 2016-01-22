@@ -5,18 +5,30 @@
     <div class="container">
         <div class="row">
             <div class="col-md-4">
-                <button class="btn btn-primary" ui-sref="<%= entityInstance %>.new">
-                    <span class="glyphicon glyphicon-flash"></span> <span translate="<%= keyPrefix %>home.createLabel">Create a new <%= entityClass %></span>
-                </button>
+                <div class="form-group">
+                    <button class="btn btn-primary" ui-sref="<%= entityInstance %>.new">
+                        <span class="glyphicon glyphicon-flash"></span> <span translate="<%= keyPrefix %>home.createLabel">Create a new <%= entityClass %></span>
+                    </button>
+                </div>
             </div>
             <%_ if (searchEngine == 'elasticsearch') { _%>
             <div class="col-md-8">
                 <form name="searchForm" class="form-inline">
                     <div class="form-group">
-                        <input type="text" class="form-control" ng-model="searchQuery" id="searchQuery" placeholder="query">
+                        <div class="input-group">
+                            <input type="text" class="form-control" ng-model="searchQuery" id="searchQuery" placeholder="query">
+                            <span class="input-group-btn">
+                                <button class="btn btn-info" ng-click="search(searchQuery)">
+                                    <span class="glyphicon glyphicon-search"></span>
+                                </button>
+                            </span>
+                            <span class="input-group-btn">
+                                <button class="btn btn-info" ng-click="clear()" ng-show="currentSearch">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </button>
+                            </span>
+                        </div>
                     </div>
-                    <button class="btn btn-info" ng-click="search()"><span class="glyphicon glyphicon-search"></span> <span>Search a <%= entityClass %></span>
-                    </button>
                 </form>
             </div>
             <%_ } _%>

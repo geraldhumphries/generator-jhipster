@@ -11,11 +11,28 @@ angular.module('<%=angularAppName%>')
         <%_ if (pagination == 'pager' || pagination == 'pagination') { _%>
         $scope.page = 1;
         $scope.loadAll = function() {
-            <%= entityClass %>.query({page: $scope.page - 1, size: 20, sort: [$scope.predicate + ',' + ($scope.reverse ? 'asc' : 'desc'), 'id']}, function(result, headers) {
-                $scope.links = ParseLinks.parse(headers('link'));
-                $scope.totalItems = headers('X-Total-Count');
-                $scope.<%= entityInstance %>s = result;
-            });
+            if ($scope.currentSearch) {
+                <%= entityClass %>Search.query({
+                    query: $scope.searchQuery,
+                    page: $scope.page - 1,
+                    size: 20,
+                    sort: [$scope.predicate + ',' + ($scope.reverse ? 'asc' : 'desc'), 'id']
+                }, function (result, headers) {
+                    $scope.links = ParseLinks.parse(headers('link'));
+                    $scope.totalItems = headers('X-Total-Count');
+                    $scope.<%= entityInstance %>s = result;
+                });
+            } else {
+                <%= entityClass %>.query({
+                    page: $scope.page - 1,
+                    size: 20,
+                    sort: [$scope.predicate + ',' + ($scope.reverse ? 'asc' : 'desc'), 'id']
+                }, function(result, headers) {
+                    $scope.links = ParseLinks.parse(headers('link'));
+                    $scope.totalItems = headers('X-Total-Count');
+                    $scope.<%= entityInstance %>s = result;
+                });
+            }
         };
         <%_ } _%>
         <%_ if (pagination == 'infinite-scroll') { _%>
@@ -47,44 +64,25 @@ angular.module('<%=angularAppName%>')
             });
         };
         <%_ } _%>
-        $scope.loadAll();
-
         <%_ if (searchEngine == 'elasticsearch') { _%>
 
-        $scope.search = function () {
-            <%= entityClass %>Search.query({query: $scope.searchQuery}, function(result) {
-                $scope.<%= entityInstance %>s = result;
-            }, function(response) {
-                if(response.status === 404) {
-                    $scope.loadAll();
-                }
-            });
+        $scope.search = function (searchQuery) {
+            $scope.links = null;
+            $scope.page = 1;
+            $scope.predicate = 'id';
+            $scope.reverse = true;
+            $scope.currentSearch = searchQuery;
+            $scope.loadAll();
         };
         <%_ } _%>
 
-        $scope.refresh = function () {
-            <%_ if (pagination != 'infinite-scroll') { _%>
-            $scope.loadAll();
-            <%_ } else { _%>
-            $scope.reset();
-            <%_ } _%>
-            $scope.clear();
-        };
-
         $scope.clear = function () {
-            $scope.<%= entityInstance %> = {
-                <%_ for (fieldId in fields) { _%>
-            		<%_ if (fields[fieldId].fieldType == 'Boolean' && fields[fieldId].fieldValidate == true && fields[fieldId].fieldValidateRules.indexOf('required') != -1) { _%>
-                <%= fields[fieldId].fieldName %>: false,
-                	<%_ } else { _%>
-                <%= fields[fieldId].fieldName %>: null,
-                    	<%_ if (fields[fieldId].fieldType == 'byte[]') { _%>
-                <%= fields[fieldId].fieldName %>ContentType: null,
-                    	<%_ } _%>
-                    <%_ } _%>
-                <%_ } _%>
-                id: null
-            };
+            $scope.links = null;
+            $scope.page = 1;
+            $scope.predicate = 'id';
+            $scope.reverse = true;
+            $scope.currentSearch = null;
+            $scope.loadAll();
         };
         <%_ if (fieldsContainBlob) { _%>
 
@@ -92,4 +90,6 @@ angular.module('<%=angularAppName%>')
 
         $scope.byteSize = DataUtils.byteSize;
         <%_ } _%>
+
+        $scope.loadAll();
     });
