@@ -13,7 +13,7 @@ angular.module('<%=angularAppName%>')
         $scope.loadAll = function() {
             if ($scope.currentSearch) {
                 <%= entityClass %>Search.query({
-                    query: $scope.searchQuery,
+                    query: $scope.currentSearch,
                     page: $scope.page - 1,
                     size: 20,
                     sort: [$scope.predicate + ',' + ($scope.reverse ? 'asc' : 'desc'), 'id']
