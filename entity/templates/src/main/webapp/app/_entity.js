@@ -7,11 +7,11 @@ angular.module('<%=angularAppName%>')
                 parent: 'entity',
                 url: '/<%= entityInstance %>s',
                 data: {
-                    authorities: ['ROLE_USER'],
+                    authorities: ['USER'],
                     pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityInstance %>.home.title'<% }else{ %>'<%= entityClass %>s'<% } %>
                 },
                 views: {
-                    'content@': {
+                    'content@site': {
                         templateUrl: 'scripts/app/entities/<%= entityInstance %>/<%= entityInstance %>s.html',
                         controller: '<%= entityClass %>Controller'
                     }
@@ -31,11 +31,11 @@ angular.module('<%=angularAppName%>')
                 parent: 'entity',
                 url: '/<%= entityInstance %>/{id}',
                 data: {
-                    authorities: ['ROLE_USER'],
+                    authorities: ['USER'],
                     pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityInstance %>.detail.title'<% }else{ %>'<%= entityClass %>'<% } %>
                 },
                 views: {
-                    'content@': {
+                    'content@site': {
                         templateUrl: 'scripts/app/entities/<%= entityInstance %>/<%= entityInstance %>-detail.html',
                         controller: '<%= entityClass %>DetailController'
                     }
@@ -57,7 +57,7 @@ angular.module('<%=angularAppName%>')
                 parent: '<%= entityInstance %>',
                 url: '/new',
                 data: {
-                    authorities: ['ROLE_USER'],
+                    authorities: ['USER'],
                 },
                 onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                     $uibModal.open({
@@ -92,7 +92,7 @@ angular.module('<%=angularAppName%>')
                 parent: '<%= entityInstance %>',
                 url: '/{id}/edit',
                 data: {
-                    authorities: ['ROLE_USER'],
+                    authorities: ['USER'],
                 },
                 onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                     $uibModal.open({
@@ -115,7 +115,7 @@ angular.module('<%=angularAppName%>')
                 parent: '<%= entityInstance %>',
                 url: '/{id}/delete',
                 data: {
-                    authorities: ['ROLE_USER'],
+                    authorities: ['USER'],
                 },
                 onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                     $uibModal.open({
