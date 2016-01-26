@@ -5,7 +5,7 @@ angular.module('<%=angularAppName%>')
         $stateProvider
             .state('<%= entityInstance %>', {
                 parent: 'entity',
-                url: '/<%= entityInstance %>s',
+                url: '/<%= entityInstance %>s?page&sort&search',
                 data: {
                     authorities: ['USER'],
                     pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityInstance %>.home.title'<% }else{ %>'<%= entityClass %>s'<% } %>
@@ -16,7 +16,30 @@ angular.module('<%=angularAppName%>')
                         controller: '<%= entityClass %>Controller'
                     }
                 },
-                resolve: {<% if (enableTranslation){ %>
+                <%_ if (pagination == 'pagination'){ _%>
+                params: {
+                    page: {
+                        value: '1',
+                            squash: true
+                    },
+                    sort: {
+                        value: 'id,asc',
+                            squash: true
+                    },
+                    search: null
+                },<% } %>
+                resolve: {
+                <%_ if (pagination == 'pagination'){ _%>
+                    pagingParams: ['$stateParams', 'PaginationUtil', function ($stateParams, PaginationUtil) {
+                        return {
+                            page: PaginationUtil.parsePage($stateParams.page),
+                            sort: $stateParams.sort,
+                            predicate: PaginationUtil.parsePredicate($stateParams.sort),
+                            ascending: PaginationUtil.parseAscending($stateParams.sort),
+                            search: $stateParams.search
+                        }
+                    }],
+                <%_ } if (enableTranslation){ _%>
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('<%= entityInstance %>');<%
                         for (var fieldIdx in fields) {
