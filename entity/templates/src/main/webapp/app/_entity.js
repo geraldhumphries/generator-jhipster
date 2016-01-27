@@ -20,11 +20,11 @@ angular.module('<%=angularAppName%>')
                 params: {
                     page: {
                         value: '1',
-                            squash: true
+                        squash: true
                     },
                     sort: {
                         value: 'id,asc',
-                            squash: true
+                        squash: true
                     },
                     search: null
                 },<% } %>
